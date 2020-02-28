@@ -1,0 +1,114 @@
+﻿@model ProductModel
+
+@inject IOptions<StripeOptions> StripeOptions
+
+@{ ViewData["Title"] = "Request Button Example"; }
+
+<section class="bg-light rounded p-2">
+    <div class="row">
+        <div class="col">
+            <h2 class="mb-2 font-weight-bold">Request Payment Button</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6 text-center">
+            <img src="~/img/rubberduck.jpg" class="img-fluid rounded" alt="">
+        </div>
+
+        <div class="col-6">
+            <div class="p-4">
+                <div class="lead my-2">
+                    <span class="font-weight-bold">Price: </span><span>@Model.Price.ToString("C")</span>
+                </div>
+
+                <div class="lead">
+                    <h3 class="font-weight-bold">@Model.Name</h3>
+                </div>
+
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos atque quia ipsa
+                    sint voluptatibus! Beatae sit assumenda asperiores iure at maxime atque repellendus maiores quia sapiente.
+                </p>
+
+                <form method="post">
+                    <div class="row">
+                        <div class="col">
+                            <div class="float-right">
+                                <button id="payment-request-button" class="btn btn-primary" type="button" href="#payment-form">Buy</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div id="incompatible-message" class="alert alert-warning my-2 d-none" role="alert">
+                Your browser does not support the payment request API. To view this demo, you'll need to try it in a browser that does.
+                See <a class="alert-link" href="https://caniuse.com/#feat=payment-request">https://caniuse.com/#feat=payment-request</a> for more information.
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        (function () {
+            "use strict";
+
+            $(document).ready(function () {
+                // Switch out the test key here with your own
+                let stripe = Stripe("@StripeOptions.Value.PublicKey");
+                let paymentRequest = stripe.paymentRequest({
+                    country: 'CA',
+                    currency: 'cad',
+                    total: {
+                        label: "@Model.Name",
+                        amount: @Model.Price * 100, // Price in cents
+                    }
+                });
+
+                // Check the availability of the Payment Request API first.
+                paymentRequest.canMakePayment().then(function (result) {
+                    let message = $("#incompatible-message");
+                    let button = $("#payment-request-button");
+
+                    if (result) {
+                        button.prop("disabled", false);
+
+                        // Attach button click to start payment request
+                        button.on("click", paymentRequest.show);
+                    } else {
+                        button.prop("disabled", true);
+                        message.toggleClass("d-none");
+                    }
+                });
+
+                paymentRequest.on('token', function (e) {
+                    // Send the token to your server to charge it!
+                    fetch('/payment/charges', {
+                        method: 'post',
+                        headers: { 'content-type': 'application/json' },
+                        body: JSON.stringify({
+                            token: e.token.id,
+                            description: "@Model.Name",
+                            amountInCents: @Model.Price * 100, // Price in cents
+                            currencyCode: "cad"
+                        })
+                    // Report to the browser that the payment was successful or failed.
+                    }).then(function (response) {
+                        if (response.ok) {
+                            e.complete('success');
+                            window.location.replace("@Url.Action("Confirmation")")
+                        } else {
+                            e.complete('fail');
+                        }
+                    });
+                });
+            });
+        })();
+    </script>
+}

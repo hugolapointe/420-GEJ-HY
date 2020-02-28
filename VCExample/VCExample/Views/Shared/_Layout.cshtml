@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>View Component Example</title>
+
+    <link asp-href-include="lib/bootstrap/dist/css/*.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    @RenderSection("scripts", false)
+</body>
+</html>

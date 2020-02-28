@@ -1,0 +1,20 @@
+﻿@model IdentityRole
+
+@{ Layout = "_Layout"; }
+
+<div class="bg-primary my-1 p-1">
+    <h4>Create Role</h4>
+</div>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <div><span asp-validation-for="Name" class="text-danger"></span></div>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+

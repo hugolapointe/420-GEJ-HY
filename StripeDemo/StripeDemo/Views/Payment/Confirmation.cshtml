@@ -1,0 +1,38 @@
+﻿
+@{ ViewData["Title"] = "Confirmation"; }
+
+<section class="row bg-light rounded">
+    <div class="col p-2">
+        <h2>Confirmation</h2>
+        <p>Your purchase was confirmed!</p>
+
+        <div class="float-right">
+            <span class="text-muted">You will be redirect in <span id="countdown"></span> secondes...</span>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-success">Return</a>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script>
+        (function () {
+            "use strict";
+
+            $(document).ready(function () {
+                let timeSec = 5;
+                let countdown = $("#countdown");
+
+                countdown.text(timeSec);
+                setInterval(function () {
+                    timeSec--;
+                    countdown.text(timeSec);
+
+                    if (timeSec == 0) {
+                        window.location.replace("@Url.Action("Index", "Home")")
+                    }
+
+                }, 1000);
+            });
+        })();
+    </script>
+}

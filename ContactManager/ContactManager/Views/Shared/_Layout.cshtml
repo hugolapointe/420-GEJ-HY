@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Contact Manager</title>
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <header class="container bg-dark rounded-bottom">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">Contact Manager</a>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown"><a class="nav-link" asp-controller="Contact" asp-action="Index">Contacts</a></li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <partial name="_LogInPartial">
+            </ul>
+        </nav>
+    </header>
+    <div class="container bg-light p-2">
+        @RenderBody()
+    </div>
+
+    <!-- External JS -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Internal JS -->
+    @RenderSection("scripts", false)
+</body>
+</html>

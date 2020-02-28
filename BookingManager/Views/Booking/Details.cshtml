@@ -1,0 +1,22 @@
+﻿@model BookingDetails
+
+<div class="bg-success m-1 p-1 text-white"><h2>Your Appointment</h2></div>
+<table class="table table-bordered">
+    <tr>
+        <th>Your name is:</th>
+        <td>@Model.ClientName</td>
+    </tr>
+    <tr>
+        <th>Your phone number is:</th>
+        <td>@Model.ClientPhoneNumber</td>
+    </tr>
+    <tr>
+        <th>Your email address is:</th>
+        <td>@Model.ClientEmailAddress</td>
+    </tr>
+    <tr>
+        <th>Your appontment date is:</th>
+        <td>@Model.Date.ToString("d")</td>
+    </tr>
+</table>
+<a class="btn btn-success" asp-action="Create">Book another appointment</a>

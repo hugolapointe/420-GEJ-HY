@@ -1,0 +1,209 @@
+﻿@model ProductModel
+
+@inject IOptions<StripeOptions> StripeOptions
+
+@{ ViewData["Title"] = "Subscritpion"; }
+
+<section class="bg-light rounded p-2">
+    <div class="row">
+        <div class="col">
+            <h2 class="mb-2 font-weight-bold">Subscritpion</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6 text-center">
+            <img src="~/img/rubberduck.jpg" class="img-fluid rounded" alt="">
+        </div>
+
+        <div class="col-6">
+            <div class="p-4">
+                <div class="lead my-2">
+                    <span class="font-weight-bold">Price: </span><span>@Model.Price.ToString("C")/month</span>
+                </div>
+
+                <div class="lead">
+                    <h3 class="font-weight-bold">@Model.Name</h3>
+                </div>
+
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos atque quia ipsa
+                    sint voluptatibus! Beatae sit assumenda asperiores iure at maxime atque repellendus maiores quia sapiente.
+                </p>
+
+                <form method="post">
+                    <div class="row">
+                        <div class="col">
+                            <div class="float-right">
+                                <button id="subscribe-button" class="btn btn-primary" type="button" href="#payment-form">subscribe</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div id="incompatible-message" class="alert alert-warning my-2 d-none" role="alert">
+                Your browser does not support the payment request API. To view this demo, you'll need to try it in a browser that does.
+                See <a class="alert-link" href="https://caniuse.com/#feat=payment-request">https://caniuse.com/#feat=payment-request</a> for more information.
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="payment-section" class="modal fade rounded" role="dialog">
+    <form id="payment-form" class="modal-dialog modal-content bg-light" action="#" method="post" accept-charset="UTF-8">
+
+        <div class="modal-header">
+            <h4 class="modal-title">Payment Informations</h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-row mb-2">
+                <div class="col">
+                    <label for="name" class="control-label">Name</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white"><i class="fas fa-user"></i></span>
+                        </div>
+                        <input id="name" name="name" class="form-control border-left-0" type="text" placeholder="Nom" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row mb-2">
+                <div class="col">
+                    <label for="phone" class="control-label">Phone</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white"><i class="fas fa-phone"></i></span>
+                        </div>
+                        <input id="phone" name="phone" class="form-control border-left-0" type="text" placeholder="Phone number" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row mb-2">
+                <div class="col">
+                    <label for="email" class="control-label">Email</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white"><i class="fas fa-at"></i></span>
+                        </div>
+                        <input id="email" class="form-control border-left-0" type="email" placeholder="Email address" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row mb-2">
+                <div class="col">
+                    <label for="card" class="control-label">Card</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-white"><i class="fas fa-credit-card"></i></span>
+                        </div>
+                        <div id="card" class="form-control border-left-0"></div>
+                    </div>
+                    <div id="card-errors" role="alert"></div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer row">
+                <div class="float-right">
+                    <button id="cancel-btn" type="button" class="btn btn-outline-danger">Cancel</button>
+                    <button id="reset-btn" type="reset" class="btn btn-outline-secondary">Reset</button>
+                    <button id="submit-btn" type="submit" class="btn btn-success">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+@section scripts {
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script>
+        (function () {
+            "use strict";
+
+            $(document).ready(function () {
+                $("#subscribe-button").on("click", function () {
+                    $("#payment-section").modal({
+                        backdrop: 'static'
+                    });
+
+                    $("#cancel-btn").on("click", function () {
+                        $("#payment-section").modal("hide");
+                    });
+                });
+
+                let stripe = Stripe("@StripeOptions.Value.PublicKey");
+                let elements = stripe.elements();
+
+                let card = elements.create("card", {
+                    style: {
+                        base: {
+                            fontSize: "16px",
+                            fontWeight: "400",
+                            color: "#495057",
+                        }
+                    },
+                    hideIcon: true,
+                    hidePostalCode: true
+                });
+
+                card.mount("#card");
+
+                card.addEventListener('change', function (event) {
+                    var displayError = document.getElementById('card-errors');
+                    if (event.error) {
+                        displayError.textContent = event.error.message;
+                    } else {
+                        displayError.textContent = '';
+                    }
+                });
+
+                // Create a token or display an error when the form is submitted.
+                var form = $("#payment-form");
+                form.on('submit', function (e) {
+                    e.preventDefault();
+
+                    stripe.createToken(card).then(function (result) {
+                        if (result.error) {
+                            $("#card-errors").textContent = result.error.message;
+                        } else {
+                            // Send the token to your server.
+                            stripeTokenHandler(result.token);
+                        }
+                    });
+                });
+
+                function stripeTokenHandler(token) {
+                    fetch('/subscription/charges', {
+                        method: 'post',
+                        headers: { 'content-type': 'application/json' },
+                        body: JSON.stringify({
+                            token: token.id,
+                            description: "@Model.Name",
+                            amountInCents: @Model.Price * 100, // Price in cents
+                            currencyCode: "cad",
+                            name: $("#name").val(),
+                            email: $("#email").val(),
+                            phone: $("#phone").val()
+                        })
+                    // Report to the browser that the payment was successful or failed.
+                    }).then(function (response) {
+                        if (response.ok) {
+                            window.location.replace("@Url.Action("Confirmation", "Payment")")
+                        } else {
+                            e.complete('fail');
+                        }
+                    });
+                }
+            });
+        })();
+    </script>
+}

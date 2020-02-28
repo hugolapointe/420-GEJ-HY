@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<UserModel> SignInMgr
+@inject UserManager<UserModel> UserMgr
+
+@if (SignInMgr.IsSignedIn(User)) {
+    <form id="logoutForm" method="post" asp-controller="Account" asp-action="LogOut" asp-route-returnUrl="/Home/Index" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item"><span>Hi @UserMgr.GetUserName(User)!</span></li>
+            <li class="nav-item"><button class="btn btn-link nav-link" type="submit">LogOut</button></li>
+        </ul>
+    </form>
+} else {
+    <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item"><a asp-controller="Account" asp-action="LogIn" class="nav-link">Log In</a></li>
+    </ul>
+}

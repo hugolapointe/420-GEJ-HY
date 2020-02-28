@@ -1,0 +1,10 @@
+﻿@model IEnumerable<ToDo>
+
+<div class="bg-success m-1 p-1 text-white">
+    <h2>Priority List</h2>
+</div>
+<ul class="list-group">
+    @foreach (var item in Model) {
+    <li class="list-group-item">@item.Name</li>
+}
+</ul>

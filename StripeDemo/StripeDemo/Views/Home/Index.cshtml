@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Stripe</h1>
+    <p class="lead">Easy payments for developers.</p>
+    <p><a href="http://stripe.com/docs" class="btn btn-primary btn-primary">Learn more &raquo;</a></p>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">One-time Payment with a Request Payment Button</h5>
+                <p class="card-text">
+                    This demo shows how to accept a one-time payment for a book with an embedded form.
+                </p>
+                <a asp-controller="Payment" asp-action="RequestButton" class="btn btn-outline-primary">Example &raquo;</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">One-time Payment with Stripe Elements</h5>
+                <p class="card-text">
+                    This demo shows how to accept a one-time payment for a book with a customized form.
+                </p>
+                <a asp-controller="Payment" asp-action="Elements" class="btn btn-outline-primary">Example &raquo;</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Subscription Payments</h5>
+                <p class="card-text">
+                    This demo shows you how to accept recurring payments for a subscription software service.
+                </p>
+                <a asp-controller="Subscription" asp-action="Index" class="btn btn-outline-primary">Example &raquo;</a>
+            </div>
+        </div>
+    </div>
+</div>

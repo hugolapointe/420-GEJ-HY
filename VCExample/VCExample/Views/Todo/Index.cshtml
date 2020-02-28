@@ -1,0 +1,27 @@
+﻿@model IEnumerable<ToDo>
+
+@{ Layout = "_Layout"; }
+
+<div class="bg-success m-1 p-1 text-white">
+    <h2>ToDo List</h2>
+</div>
+
+<table class="table p-1 table-sm table-striped">
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.IsDone)</th>
+        <th>@Html.DisplayNameFor(model => model.Priority)</th>
+        <th>@Html.DisplayNameFor(model => model.Name)</th>
+    </tr>
+
+    @foreach(var item in Model) {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.IsDone)</td>
+            <td>@Html.DisplayFor(modelItem => item.Priority)</td>
+            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+        </tr>
+    }
+</table>
+
+<vc:priority-list max-priority="2" is-done="false">
+</vc:priority-list>
+

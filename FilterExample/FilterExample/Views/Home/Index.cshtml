@@ -1,0 +1,22 @@
+﻿@{ Layout = "_Layout"; }
+
+@if(Model is string) {
+    <p>@Model</p>
+
+} else if(Model is IDictionary<string, string>) {
+    var dict = Model as IDictionary<string, string>;
+
+    <table class="table table-sm table-striped table-bordered">
+        <thead><tr><th>Name</th><th>Value</th></tr></thead>
+        <tbody>
+            @if(dict.Any()) {
+                @foreach(var kvp in Model) {
+                    <tr><td>@kvp.Key</td><td>@kvp.Value</td></tr>
+                }
+
+            } else {
+                <tr><td colspan = "2" style = "text-align: center">No data</td></tr>
+            }
+        </tbody>
+    </table>
+}

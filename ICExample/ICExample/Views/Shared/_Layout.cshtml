@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Identity Core Example</title>
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- Internal CSS -->
+    <link rel="stylesheet" href="~/css/default.css">
+
+    <!-- External JS -->
+    <script defer src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script defer src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Internal JS -->
+    @RenderSection("scripts", false)
+</head>
+<body>
+    <div class="container">
+        @RenderBody()
+    </div>
+
+</body>
+</html>

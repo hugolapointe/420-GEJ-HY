@@ -1,0 +1,66 @@
+﻿@model UserCreateModel
+
+@{ Layout = "_Layout"; }
+
+<div class="bg-primary text-white my-1 p-1">
+    <h4>Create User</h4>
+</div>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<form asp-action="Create" method="post">
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label asp-for="Username"></label>
+                <input asp-for="Username" class="form-control" />
+                <div><span asp-validation-for="Username" class="text-danger"></span></div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <div><span asp-validation-for="Email" class="text-danger"></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label asp-for="Firstname"></label>
+                <input asp-for="Firstname" class="form-control" />
+                <div><span asp-validation-for="Firstname" class="text-danger"></span></div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label asp-for="Lastname"></label>
+                <input asp-for="Lastname" class="form-control" />
+                <div><span asp-validation-for="Lastname" class="text-danger"></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" />
+                <div><span asp-validation-for="Password" class="text-danger"></span></div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label asp-for="PasswordConfirmation"></label>
+                <input asp-for="PasswordConfirmation" class="form-control" />
+                <div><span asp-validation-for="PasswordConfirmation" class="text-danger"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="float-right">
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>
+
